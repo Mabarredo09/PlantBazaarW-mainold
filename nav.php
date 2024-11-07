@@ -175,8 +175,8 @@ if ($isLoggedIn) {
             <div class="nav1">
                 <a href="index" id="home">Home</a>
                 <a href="plantCategories">Plants Categories</a>
-                <a href="#" >About</a>
-                <a href="#">Contact Us</a>
+                <a href="#about" >About</a>
+                <a href="#contact">Contact Us</a>
                 <?php if ($isLoggedIn): ?>
                 <a href="#" id="chats">Chats</a>
                 <?php endif;?> 
@@ -206,9 +206,13 @@ if ($isLoggedIn) {
             </a>
             <a><p>Hello, <?php echo $firstname . ' ' . $lastname; ?></p> </a>
         <?php endif;?>
-        <a href="#" id="home1">Home</a>
-        <a href="#" id="about1">About</a>
-        <a href="#">Contact</a>
+        <a href="index" id="home1">Home</a>
+        <a href="plantCategories">Plants Categories</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <?php if ($isLoggedIn): ?>
+        <a href="chat_upgrade/index" id="chats">Chats</a>
+        <?php endif;?> 
         <?php if ($isLoggedIn): ?>
             <a href="#" id="logoutLink">Logout</a>
         <?php else:?>

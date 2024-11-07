@@ -17,6 +17,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $report_reason = $_POST['report_reason'];
     $description = $_POST['description'];
 
+    $checkReportedUserId = "SELECT id FROM users WHERE id = ?";
+    $stmt = $conn->prepare($checkReportedUserId);
+    $stmt->bind_param("i", $reported_user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    if (!$row) {
+        echo json_encode(['success' => false, 'message' => 'User not found']);
+        exit();
+    }
+
     // Handle file uploads for proof images
     $proof_images = array_fill(1, 6, null); // Initialize an array with 6 null values
 

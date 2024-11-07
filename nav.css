@@ -326,6 +326,7 @@ a {
 }
 
 .profile-link{
+    margin: 0 auto;
     text-decoration: none;
     color: #352208;
     font-weight: 600;

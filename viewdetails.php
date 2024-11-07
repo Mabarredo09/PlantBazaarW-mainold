@@ -37,7 +37,7 @@ if (isset($_GET['plantId']) && isset($_GET['sellerEmail'])) {
         $img1 = $plant['img1'];
         $img2 = $plant['img2'];
         $img3 = $plant['img3'];
-
+        
         // Fetch seller's profile data
         $sellerQuery = "SELECT u.firstname, u.lastname, u.email, u.proflepicture, u.address FROM users u JOIN sellers s ON u.id = s.user_id WHERE s.seller_id = ?";
         $sellerStmt = $conn->prepare($sellerQuery);
@@ -106,13 +106,13 @@ function getImagePath($sellerEmail, $img) {
    <a href="javascript:history.back()" class="back-button">Back</a>
     <div class="plantContainer">
     <div class="card">
-        <div class="card-image-container">
-        <img id="plant-image" src="<?php echo getImagePath($sellerEmail, $img1); ?>" alt="<?php echo $plantName; ?>">
+        <div class="card-image-container" style="padding: 10px">
+            <img id="plant-image"style="width:400px; height:400px; object-fit: cover;" src="<?php echo getImagePath($sellerEmail, $img1); ?>" alt="<?php echo $plantName; ?>">
 
-        <div class="card-image-controls">
-            <button id="prev-btn"><</button>
-            <button id="next-btn">></button>
-        </div>
+            <div class="card-image-controls">
+                <button id="prev-btn"><</button>
+                <button id="next-btn">></button>
+            </div>
         </div>
         <div class="card-content">
     <h1><?php echo $plantName; ?></h1>
@@ -138,6 +138,7 @@ function getImagePath($sellerEmail, $img) {
             <h3><?php echo $sellerFirstname . ' ' . $sellerLastname; ?></h3>
             <p class="small">@<?php echo $sellerData['email']; ?></p>
         </div>
+        <br>
         <form action="profile.php" method="get">
         <input type="hidden" name="sellerId" value="<?php echo $sellerId; ?>">
         <button type="submit">View Seller Profile</button>
@@ -157,22 +158,33 @@ function getImagePath($sellerEmail, $img) {
 
     <script>
         // Modal functionality
-document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('imageModal');
     const zoomedImage = document.getElementById('zoomed-image');
     const closeModal = document.getElementById('closeModal');
-    const prevBtn = document.getElementById('zoom-prev-btn');
-    const nextBtn = document.getElementById('zoom-next-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const zoomPrevBtn = document.getElementById('zoom-prev-btn');
+    const zoomNextBtn = document.getElementById('zoom-next-btn');
 
     let images = [
         '<?php echo getImagePath($sellerEmail, $img1); ?>',
         '<?php echo getImagePath($sellerEmail, $img2); ?>',
         '<?php echo getImagePath($sellerEmail, $img3); ?>'
-    ];
+    ].filter(image => image && image !== 'default-image.jpg'); // Filter out empty or default images
     let currentIndex = 0;
 
     function showImage(index) {
         zoomedImage.src = images[index];
+        document.getElementById('plant-image').src = images[index];
+    }
+
+    // Hide navigation buttons if there is only one image
+    if (images.length <= 1) {
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+        zoomPrevBtn.style.display = 'none';
+        zoomNextBtn.style.display = 'none';
     }
 
     prevBtn.addEventListener('click', function () {
@@ -181,6 +193,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     nextBtn.addEventListener('click', function () {
+        currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
+        showImage(currentIndex);
+    });
+
+    zoomPrevBtn.addEventListener('click', function () {
+        currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
+        showImage(currentIndex);
+    });
+
+    zoomNextBtn.addEventListener('click', function () {
         currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
         showImage(currentIndex);
     });

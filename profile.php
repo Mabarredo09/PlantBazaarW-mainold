@@ -9,7 +9,7 @@ if (isset($_GET['sellerId'])) {
     $sellerId = $_GET['sellerId'];
 
     // Fetch seller's profile data
-    $sellerQuery = "SELECT u.firstname, u.lastname, u.email, u.proflepicture, u.address
+    $sellerQuery = "SELECT u.firstname, u.lastname, u.email, u.proflepicture, u.region, u.city
                     FROM users u 
                     JOIN sellers s ON u.id = s.user_id 
                     WHERE s.seller_id = ?";
@@ -25,7 +25,7 @@ if (isset($_GET['sellerId'])) {
         $sellerLastname = $sellerData['lastname'];
         $sellerEmail = $sellerData['email'];
         $sellerProfilePicture = $sellerData['proflepicture'];
-        $sellerAddress = $sellerData['address'];
+        $sellerAddress = $sellerData['region'] . ', ' . $sellerData['city'];
     } else {
         echo "Seller not found.";
         exit;
@@ -78,7 +78,7 @@ if (isset($_GET['sellerId'])) {
             echo '<p><strong>Price:</strong> ₱' . htmlspecialchars($listing['price']) . '</p>';
             echo '<p><strong>Description:</strong> ' . htmlspecialchars($listing['details']) . '</p>';
             // Modify the View More Details button to redirect to viewmoredetails.php
-            echo '<button class="view-details" onclick="viewMoreDetails(' . htmlspecialchars($listing['plantid']) . ', \'' . htmlspecialchars($sellerEmail) . '\')">View more details</button>';
+            echo '<button class="view-details" onclick="viewMoreDetails(' . htmlspecialchars($listing['plantid']) . ', \'' . htmlspecialchars($sellerEmail) . '\')">View Plants</button>';
             echo '</div>';
             echo '</div>';
         }

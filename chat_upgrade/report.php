@@ -30,10 +30,12 @@ $reported_user = $_GET['user_id'];
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 </head>
 <body>
+
     <div class="container">
+    <a href="index.php" class="back-btn">Back to Chats</a>
         <h1>Report User</h1>
         <form action="report.php" method="POST" enctype="multipart/form-data">
-            <input type="text" name="reported_user_id" value="<?php echo $reported_user;?>">
+            <input type="hidden" name="reported_user_id" value="<?php echo $reported_user;?>">
             <label for="report_reason">Reason for Report:</label>
             <select name="report_reason" id="report_reason" required>
                 <option value="Prohibited item">Prohibited item</option>
@@ -61,7 +63,7 @@ $reported_user = $_GET['user_id'];
             
             <button type="submit">Submit Report</button>
         </form>
-        <a href="index.php" class="back-btn">Back to Messages</a>
+       
     </div>
 </body>
 <script>

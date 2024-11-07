@@ -55,26 +55,44 @@ include 'nav.php';
 <!-- Start of Main Content  -->
 <div class="main-content">
     <h1>Welcome to Your Seller Dashboard</h1>
-    <Br>
+    
+
     <div class="product-list">
         <h2>Your Listed Plants</h2>
         <div class="card-container">
             <!-- Products will be dynamically inserted here -->
         </div>
         <button id="viewSoldHistoryButton">View Sold Listings History</button>
-    <style>
-        #viewSoldHistoryButton {
-            background-color: #4CAF50;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            margin-left: 10px
-        }
-    </style>
+    <style>/* Styles for View Sold Listings History Button */
+#viewSoldHistoryButton {
+    background-color: darkgreen; /* Blue background */
+    color: white; /* White text */
+    font-size: 12px; /* Medium font size */
+    padding: 10px 10px; /* Padding for height and width */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.1s ease; /* Smooth transition for background color and scale */
+    margin-left: 10px
+}
+
+/* Hover effect */
+#viewSoldHistoryButton:hover {
+    background-color: #4CAF50; /* Darker blue on hover */
+}
+
+/* Active state */
+#viewSoldHistoryButton:active {
+    background-color: #1f6391; /* Even darker blue on click */
+    transform: scale(0.98); /* Slightly shrink button on click */
+}
+
+/* Focus state */
+#viewSoldHistoryButton:focus {
+    outline: none; /* Remove outline on focus */
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5); /* Light blue shadow when focused */
+}
+</style>
     </div>
     
     <div id="addProductModal" class="modal">
@@ -123,22 +141,24 @@ include 'nav.php';
                 <label for="Location">Location:</label>
                 <div class="col-sm-6 mb-3">
                 <label class="form-label">Region <span class="text-danger">*</span></label>
-                <select name="region" class="region" id="region"></select>
+                <select name="region" class="region" id="region" 
+        style="font-size: 16px; padding: 10px; border: 2px solid #ccc; border-radius: 5px; background-color: #f9f9f9; outline: none; width: 100%;">
+</select>
                 <input type="hidden" class="region-text" name="region" id="region-text" required>
                 </div>
-                <div class="col-sm-6 mb-3">
-                <label class="form-label">Province *</label>
-                <select name="province" class="province" id="province"></select>
+                <div class="-sm-sm-6 mb-3">
+                <label class="form-label" >Province *</label>
+                <select name="province" class="province" id="province"  style="font-size: 16px; padding: 10px; border: 2px solid #ccc; border-radius: 5px; background-color: #f9f9f9; outline: none; width: 100%;" ></select>
                 <input type="hidden" class="province-text" name="province" id="province-text" required>
                 </div>
                 <div class="col-sm-6 mb-3">
                 <label class="form-label">City / Municipality *</label>
-                <select name="city" class="city" id="city"></select>
+                <select name="city" class="city" id="city"  style="font-size: 16px; padding: 10px; border: 2px solid #ccc; border-radius: 5px; background-color: #f9f9f9; outline: none; width: 100%;"></select>
                 <input type="hidden" class="city-text" name="city" id="city-text" required>
                 </div>
                 <div class="col-sm-6 mb-3">
                 <label class="form-label">Barangay *</label>
-                <select name="barangay" class="barangay" id="barangay"></select>
+                <select name="barangay" class="barangay" id="barangay"  style="font-size: 16px; padding: 10px; border: 2px solid #ccc; border-radius: 5px; background-color: #f9f9f9; outline: none; width: 100%;"></select>
                 <input type="hidden" class="barangay-text" name="barangay" id="barangay-text" required>
                 </div>
                 <div class="col-md-6 mb-3">
@@ -166,106 +186,155 @@ include 'nav.php';
 
 
                 <button type="submit">Add Product</button>
+                <style>
+                    /* Styles for Add Product Button */
+button[type="submit"] {
+    background-color: darkgreen; /* Coral background */
+    color: white; /* White text */
+    font-size: 16px; /* Medium font size */
+    padding: 10px 20px; /* Padding for height and width */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.1s ease; /* Smooth transition for color and scale */
+}
+
+/* Hover effect */
+button[type="submit"]:hover {
+    background-color: #4CAF50; /* Darker coral on hover */
+}
+
+/* Active state */
+button[type="submit"]:active {
+    background-color: #e55342; /* Even darker coral when clicked */
+    transform: scale(0.98); /* Slightly shrink button on click */
+}
+
+/* Focus state */
+button[type="submit"]:focus {
+    outline: none; /* Remove outline on focus */
+    box-shadow: 0 0 5px rgba(255, 127, 80, 0.5); /* Coral shadow when focused */
+}
+
+                </style>
             </form>
             <div id="message"></div>
         </div>
     </div>
     <!-- <a href="add_product.php" id="openModalLink" class="add-product-btn">+ Add New Plant</a> -->
+    <button type="button" id="openModalBtn1" class="add-plant-button">Add New Plant</button>
     <style>
-        #openModalBtn1 {
-            background-color: #4CAF50;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            border: none;
-            cursor: pointer;
-            width: 10%;
-            margin-left: 10px;
-        }
+        #openModalBtn1.add-plant-button {
+    width: auto !important;;
+    background-color: darkgreen;
+    color: white;
+    font-size: 12px;
+    padding: 12px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#openModalBtn1.add-plant-button:hover {
+    background-color: #4CAF50;
+}
+
     </style>
-    <button type="button" id="openModalBtn1">Add New Plant</button>
-        <!-- End of Main Content -->
-         
-        <div id="editProductModal" class="modal">
+
+
+<div id="editProductModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Edit Plant</h2>
         <form id="editProductForm" enctype="multipart/form-data">
-            <input type="hidden" id="editPlantId" name="plantid">
-
-            <!-- Plant Name -->
+            <input type="hidden" id="editPlantId" name="plantid"> <!-- Hidden field to hold plant ID -->
             <label for="editplantname">Plant Name:</label>
-            <input type="text" id="editplantname" name="editplantname" required>
+            <input type="text" id="editplantname" name="editplantname" value="<?php echo $row['plantname']; ?>" required>
 
-            <!-- Plant Size -->
             <label for="editPlantSize">Plant Size:</label>
-            <select name="editPlantSize" id="editPlantSize" required>
-                <option value="" disabled selected>Select Size</option>
-                <option value="Seedling">Seedling</option>
-                <option value="Juvenile">Juvenile</option>
-                <option value="Adult">Adult</option>
-            </select>
+                <br>
+                <select name="editPlantSize" id="editPlantSize"  style="font-size: 16px; padding: 10px; border: 2px solid #ccc; border-radius: 5px; background-color: #f9f9f9; outline: none; width: 100%;" required>
+                    <option value="" disabled selected>Select Size</option>
+                    <option value="Seedling">Seedling</option>
+                    <option value="Juvenile">Juvenile</option>
+                    <option value="Adult">Adult</option>
+                </select>
+                <br>
 
-            <!-- Description -->
-            <label for="editplantdetails">Description (optional):</label>
-            <textarea name="editplantdetails" id="editplantdetails" cols="30" rows="10"></textarea>
+                <label for="editplantdetails">Description (optional) :</label>
+                <textarea name="editplantdetails" id="editplantdetails" cols="30" rows="10"></textarea>
+                <br>
 
-            <!-- Category -->
-            <label for="editPlantCategories">Category:</label>
-            <select name="editPlantcategories" id="editPlantcategories" required>
-                <option value="" disabled selected>Select Category</option>
-                <option value="Outdoor">Outdoor Plant</option>
-                <option value="Indoor">Indoor Plants</option>
-                <!-- Add other options as needed -->
-            </select>
+            <label for="editPlantCategories">Category:<span class="required" ></label>
+                <br>
+                <select name="editPlantcategories" id="editPlantcategories"  style="font-size: 16px; padding: 10px; border: 2px solid #ccc; border-radius: 5px; background-color: #f9f9f9; outline: none; width: 100%;" required>
+                    <option value="" disabled selected>Select Category</option>
+                    <option value="Outdoor">Outdoor Plant</option>
+                    <option value="Indoor">Indoor Plants</option>
+                    <option value="Flowers">Flowers</option>
+                    <option value="Leaves">Leaves</option>
+                    <option value="Bushes">Bushes</option>
+                    <option value="Trees">Trees</option>
+                    <option value="Climbers">Climbers Plant</option>
+                    <option value="Grasses">Grasses</option>
+                    <option value="Succulent">Succulent Plant</option>
+                    <option value="Cacti">Cacti Plant</option>
+                    <option value="Aquatic">Aquatic Plant</option>
+                </select>
+                <br>
 
-            <!-- Location -->
             <label for="editLocation">Location:</label>
             <div class="col-sm-6 mb-3">
-                <label class="form-label">Region <span style="color:red;">*</span></label>
-                <select name="editregion" id="region1" required></select>
-            </div>
-            <div class="col-sm-6 mb-3">
-                <label class="form-label">Province *</label>
-                <select name="editprovince" id="province1" required></select>
-            </div>
-            <div class="col-sm-6 mb-3">
-                <label class="form-label">City / Municipality *</label>
-                <select name="editcity" id="city1" required></select>
-            </div>
-            <div class="col-sm-6 mb-3">
-                <label class="form-label">Barangay *</label>
-                <select name="editbarangay" id="barangay1" required></select>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="street-text" class="form-label">Street (Optional)</label>
-                <input type="text" name="editstreet" id="street-text1">
-            </div>
+        <label class="form-label">Region <span style="color:red;">*</span></label>
+        <select name="editregion" class="region" id="region1"  style="font-size: 16px; padding: 10px; border: 2px solid #ccc; border-radius: 5px; background-color: #f9f9f9; outline: none; width: 100%;"></select>
+        <input type="text" class="editregion" name="editregion" id="region-text1" required disabled>
+        </div>
+        <div class="col-sm-6 mb-3">
+            <label class="form-label">Province *</label>
+            <select name="editprovince" class="province" id="province1"  style="font-size: 16px; padding: 10px; border: 2px solid #ccc; border-radius: 5px; background-color: #f9f9f9; outline: none; width: 100%;"></select>
+            <input type="text" class="editprovince" name="editprovince" id="province-text1" required disabled>
+        </div>
+        <div class="col-sm-6 mb-3">
+            <label class="form-label">City / Municipality *</label>
+            <select name="editcity"  class="city" id="city1"  style="font-size: 16px; padding: 10px; border: 2px solid #ccc border-radius: 5px; background-color: #f9f9f9; outline: none; width: 100%;"></select>
+            <input type="text" class="editcity" name="editcity" id="city-text1" required disabled>
+        </div>
+        <div class="col-sm-6 mb-3">
+            <label class="form-label">Barangay *</label>
+            <select name="editbarangay" class="barangay" id="barangay1"  style="font-size: 16px; padding: 10px; border: 2px solid #ccc; border-radius: 5px; background-color: #f9f9f9; outline: none; width: 100%;"></select>
+            <input type="text" class="editbarangay" name="editbarangay" id="barangay-text1" required disabled>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="street-text" class="form-label">Street (Optional)</label>
+            <input type="text" class="editstreet" name="editstreet" id="street-text1">
+        </div>
 
-            <!-- Price -->
             <label for="editPrice">Price:</label>
-            <input type="number" id="editPrice" name="editPrice" required min="0" step="0.01">
-
-            <!-- Image Upload with Preview -->
+            <input type="number" id="editPrice" name="editPrice" required min="0" step="0.01" required>
+            
             <div class="image-upload-container">
-                <div class="image-upload-column">
-                    <label for="editImg1">1st Image:</label>
-                    <input type="file" id="editImg1" name="img1" accept="image/*" onchange="previewImage('editImg1')">
-                    <img id="editImg1Preview" src="" alt="Image Preview" style="width: 100px; height: 100px;">
-                </div>
-                <div class="image-upload-column">
-                    <label for="editImg2">2nd Image:</label>
-                    <input type="file" id="editImg2" name="img2" accept="image/*" onchange="previewImage('editImg2')">
-                    <img id="editImg2Preview" src="" alt="Image Preview" style="width: 100px; height: 100px;">
-                </div>
-                <div class="image-upload-column">
-                    <label for="editImg3">3rd Image:</label>
-                    <input type="file" id="editImg3" name="img3" accept="image/*" onchange="previewImage('editImg3')">
-                    <img id="editImg3Preview" src="" alt="Image Preview" style="width: 100px; height: 100px;">
-                </div>
+
+            <div class="image-upload-column">
+            <label for="editImg1">1st Image:</label>
+            <input type="file" id="editImg1" name="img1" accept="image/*">
+            <img id="editImg1Preview" src="" alt="Image Preview" style="width: 100px; height: 100px;">
             </div>
 
-            <button type="button" onclick="submitEditForm()">Update Product</button>
+            <div class="image-upload-column">
+            <label for="editImg2">2nd Image:</label>
+            <input type="file" id="editImg2" name="img2" accept="image/*">
+            <img id="editImg2Preview" src="" alt="Image Preview" style="width: 100px; height: 100px;">
+            </div>
+
+            <div class="image-upload-column">
+            <label for="editImg3">3rd Image:</label>
+            <input type="file" id="editImg3" name="img3" accept="image/*">
+            <img id="editImg3Preview" src="" alt="Image Preview" style="width: 100px; height: 100px;">
+            </div>
+
+            </div>
+            <button type="submit">Update Product</button>
         </form>
         <div id="editMessage"></div>
     </div>
@@ -277,8 +346,10 @@ include 'nav.php';
         <span class="close">&times;</span>
         <h2>Confirm Deletion</h2>
         <p>Are you sure you want to delete this listing?</p>
-        <button id="confirmDeleteButton">Yes, Delete</button>
-        <button id="cancelDeleteButton">Cancel</button>
+        <button id="confirmDeleteButton" class="delete-btn" style="background-color: red; color: white; transition: 0.3s ease;" onmouseover="this.style.backgroundColor='#f44336'" onmouseout="this.style.backgroundColor='red'">Yes, Delete</button>
+        <button id="cancelDeleteButton" class="cancel-btn" style="background-color: darkgreen; color: white; transition: 0.3s ease;" onmouseover="this.style.backgroundColor='#4CAF50'" onmouseout="this.style.backgroundColor='darkgreen'">Cancel</button>
+
+
     </div>
 </div>
 
@@ -380,6 +451,9 @@ $('#viewSoldHistoryButton').on('click', function() {
         $(this).text('View Sold Listings History'); // Change button text back to sold listings
         fetchProducts(1, 'available'); // Fetch available products
     }
+    
+     // Clear or reset pagination whenever switching views
+     $('.pagination').empty();
 });
 
 
@@ -399,6 +473,12 @@ function fetchProducts(page = 1, viewType='available') {
         success: function(data) {
             const productContainer = $('.card-container');
             productContainer.empty();
+
+            if (data.products.length === 0) {
+                productContainer.append(`<p>No products found for ${viewType === 'sold-history' ? 'sold' : 'available'} listings.</p>`);
+                $('.pagination').empty();
+                return;
+            }
 
             data.products.forEach(function(product) {
             const card = $('<div>').addClass('card');
@@ -429,12 +509,12 @@ function fetchProducts(page = 1, viewType='available') {
                 .data('plantid', product.plantid) // Store the plant ID in a data attribute
                 .text('Edit Listing') // Set the button text
                 .css({
-                    backgroundColor: '#4CAF50', // Green background
+                    backgroundColor: 'darkgreen', // Green background
                     color: 'white', // White text
                     border: 'none', // No border
-                    padding: '10px 15px', // Padding for the button
+                    padding: '10px 10px', // Padding for the button
                     textAlign: 'center', // Center text
-                    fontSize: '16px', // Font size
+                    fontSize: '12px', // Font size
                     margin: '4px 2px', // Margin around the button
                     cursor: 'pointer', // Pointer cursor on hover
                     borderRadius: '5px' // Rounded corners
@@ -445,12 +525,12 @@ function fetchProducts(page = 1, viewType='available') {
                 .data('plantid', product.plantid) // Store the plant ID in a data attribute
                 .text('Delete Listing') // Set the button text
                  .css({
-                            backgroundColor: '#f44336', // Red background
+                            backgroundColor: 'red', // Red background
                             color: 'white', // White text
                             border: 'none', // No border
-                            padding: '10px 15px', // Padding for the button
+                            padding: '10px 10px', // Padding for the button
                             textAlign: 'center', // Center text
-                            fontSize: '16px', // Font size
+                            fontSize: '12px', // Font size
                             margin: '4px 2px', // Margin around the button
                             cursor: 'pointer', // Pointer cursor on hover
                             borderRadius: '5px' // Rounded corners
@@ -460,12 +540,12 @@ function fetchProducts(page = 1, viewType='available') {
                 .data('plantid', product.plantid) // Store the plant ID in a data attribute
                 .text('Mark as Sold') // Set the button text
                 .css({
-                            backgroundColor: 'black', // Red background
-                            color: '#f8f8f8', // White text
+                            backgroundColor: '#f9f9f9', // Red background
+                            color: 'black', // White text
                             border: '1px solid #ccc', // No border
-                            padding: '10px 15px', // Padding for the button
+                            padding: '10px 10px', // Padding for the button
                             textAlign: 'center', // Center text
-                            fontSize: '16px', // Font size
+                            fontSize: '12px', // Font size
                             margin: '4px 2px', // Margin around the button
                             cursor: 'pointer', // Pointer cursor on hover
                             borderRadius: '5px' // Rounded corners
@@ -483,15 +563,8 @@ function fetchProducts(page = 1, viewType='available') {
 
                 productContainer.append(card);
             });
-                    if (viewType === 'sold-history' && data.length === 0) {
-                        productContainer.append($('<p>').text('You have no sold listings.'));
-                        
-                    }
-                        if (data.length === 0) {
-                            productContainer.append($('<p>').text('You have no plants listed.'));
-                        }
 
-                        setupPagination(data.total, viewType);
+                        setupPagination(data.total, viewType, page);
                     },
                     error: function(xhr, status, error) {
                         console.error("Request failed:", error);
@@ -499,12 +572,15 @@ function fetchProducts(page = 1, viewType='available') {
                 });
     }
 
-    function setupPagination(totalProducts, viewType) {
+    function setupPagination(totalProducts, viewType, currentPage) {
         const paginationContainer = $('.pagination');
         paginationContainer.empty(); // Clear existing pagination
 
         const totalPages = Math.ceil(totalProducts / productsPerPage);
 
+        if (totalPages <= 1) {
+        return;
+        }
         // Create pagination buttons
         for (let i = 1; i <= totalPages; i++) {
             const pageButton = $('<button>')
@@ -513,8 +589,8 @@ function fetchProducts(page = 1, viewType='available') {
                 .addClass(i === currentpage ? 'active' : '');
 
             pageButton.on('click', function() {
-                currentpage = parseInt($(this).attr('data-page'));
-                fetchProducts(currentpage);
+                const page = $(this).data('page');
+                fetchProducts(page, viewType);
                 
             });
 
@@ -522,7 +598,7 @@ function fetchProducts(page = 1, viewType='available') {
         }
     }
 
-    fetchProducts();
+    fetchProducts(1, 'available');
 
     $('.main-content').append('<div class="pagination"></div>');
 
@@ -641,17 +717,18 @@ $(document).ready(function() {
     $('#editPlantId').prop('value', data.plantid);
     $('#editplantname').prop('value', data.plantname);
     $('#editPrice').prop('value', data.price);
-    $('.editregion').prop('value', data.region);
-    $('.editprovince').prop('value', data.province);
-    $('.editcity').prop('value', data.city);
-    $('.editbarangay').prop('value', data.barangay);
+    $('#region-text1').prop('value', data.region);
+    $('#province-text1').prop('value', data.province);
+    $('#city-text1').prop('value', data.city);
+    $('#barangay-text1').prop('value', data.barangay);
     $('.editstreet').prop('value', data.street);
 
-     // Pre-fill the region, province, city, and barangay dropdowns
-     $('#region1').prop('value',data.region);
-     $('#province1').val(data.province);
-     $('#city1').val(data.city);
-    $('#barangay1').val(data.barangay);
+
+
+    const regionName = data.region;
+    const provinceName = data.province;
+    const cityName = data.city;
+    const barangayName = data.barangay;
 
     $('#editplantdetails').prop('value', data.details);
     $('#editPlantcategories').prop('value', data.plantcategories);
@@ -669,8 +746,7 @@ $(document).ready(function() {
     // Open the edit modal
     $('#editProductModal').show();
 
-    // Reinitialize the address selector after loading the modal
-    initializeAddressSelectorForEdit(data.region, data.province, data.city, data.barangay);
+    loadRegionDropdown(regionName, provinceName, cityName, barangayName);
   },
   error: function() {
     alert('Error fetching product data.');
@@ -678,103 +754,160 @@ $(document).ready(function() {
 });
 });
 
-function initializeAddressSelectorForEdit(selectedRegion, selectedProvince, selectedCity, selectedBarangay) {
-    // Clear and reload regions
-    let regionDropdown = $('#region1');
-    regionDropdown.val(regionDropdown.find('option:selected').text());
-    regionDropdown.append('<option selected="true" disabled>Choose Region</option>');
-    
-    const regionUrl = 'ph-json/region.json'; // Adjust the path accordingly
-    $.getJSON(regionUrl, function(data) {
-        console.log("Loaded region JSON:", data);
-        $.each(data, function(key, entry) {
-            regionDropdown.append($('<option></option>').attr('value', entry.region_code).text(entry.region_name));
+function loadRegionDropdown(regionName, selectedProvince, selectedCity, selectedBarangay) {
+    $.getJSON('ph-json/region.json', function(regionData) {
+        const regionDropdown = $('#region1');
+        regionDropdown.empty();
+        regionDropdown.append('<option value="" disabled>Select Region</option>');
+
+        $.each(regionData, function(index, entry) {
+            const isSelected = entry.region_name === regionName ? 'selected' : '';
+            regionDropdown.append(`<option value="${entry.region_name}" ${isSelected}>${entry.region_name}</option>`);
         });
-        regionDropdown.val(selectedRegion); // Set selected region
-        regionDropdown.trigger('change'); // Trigger the province dropdown to populate based on region
-        $('#region-text1').val(regionDropdown.find('option:selected').text()); // Fill hidden input with name
-        $('#region1').val(regionDropdown.find('option:selected').text()); // Fill hidden input with name
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-        console.error("Error loading region JSON:", textStatus, errorThrown);
+
+        // Update input text based on selected region
+        $('#region-text1').val(regionName);
+
+        // Trigger the province dropdown load after region is set
+        loadProvinceDropdown(regionName, selectedProvince, selectedCity, selectedBarangay);
     });
 
-    // When region changes, fill provinces, and select the appropriate one
+    // Update the region input text when dropdown changes
     $('#region1').on('change', function() {
-        fillProvinces('#province1', selectedProvince);
-        let selectedRegionName = $(this).find('option:selected').text(); // Get the selected region name
-        $('#region-text1').val(selectedRegionName); // Fill hidden input with region name
-    });
+        const selectedRegion = $(this).find('option:selected').text();
+        $('#region-text1').val(selectedRegion);
+        $('#province-text1').val("");
+        $('#city-text1').val("");
+        $('#barangay-text1').val("");
 
-    // When province changes, fill cities, and select the appropriate one
-    $('#province1').on('change', function() {
-        fillCities('#city1', selectedCity);
-    });
+        $('#barangay1').val("");
+        $('#province1').val("");
+        $('#city1').val("");
 
-    // When city changes, fill barangays, and select the appropriate one
-    $('#city1').on('change', function() {
-        fillBarangays('#barangay1', selectedBarangay);
+        loadProvinceDropdown(selectedRegion, '', '', ''); // Reload the provinces based on the new region
     });
 }
 
-function fillProvinces(provinceDropdownSelector, selectedProvince) {
-    let provinceDropdown = $(provinceDropdownSelector);
-    let regionCode = $('#region1').val();
-    provinceDropdown.empty();
-    provinceDropdown.append('<option selected="true" disabled>Choose Province</option>');
-    
-    const provinceUrl = 'ph-json/province.json'; // Adjust the path accordingly
-    $.getJSON(provinceUrl, function(data) {
-        var result = data.filter(function(value) {
-            return value.region_code == regionCode;
+function loadProvinceDropdown(regionName, selectedProvince, selectedCity, selectedBarangay) {
+    $.getJSON('ph-json/region.json', function(regionData) {
+        const selectedRegion = regionData.find(entry => entry.region_name === regionName);
+
+        if (!selectedRegion) {
+            console.warn('No matching region found for:', regionName);
+            return;
+        }
+    // Update the province input text based on selected value
+    $('#province-text1').val(selectedProvince);
+        const regionCode = selectedRegion.region_code;
+
+        $.getJSON('ph-json/province.json', function(provinceData) {
+            const provinceDropdown = $('#province1');
+            provinceDropdown.empty();
+            provinceDropdown.append('<option value="" disabled>Select Province</option>');
+
+            // Filter provinces by region code
+            const filteredProvinces = provinceData.filter(province => province.region_code === regionCode);
+
+            $.each(filteredProvinces, function(index, province) {
+                const isSelected = province.province_name === selectedProvince ? 'selected' : '';
+                provinceDropdown.append(`<option value="${province.province_name}" ${isSelected}>${province.province_name}</option>`);
+            });
+
+            // Update the province input text based on selected value
+            $('#province-text1').val(selectedProvince);
+
+            // Load the cities based on the selected province
+            loadCityDropdown(selectedProvince, selectedCity, selectedBarangay);
         });
 
-        $.each(result, function(key, entry) {
-            provinceDropdown.append($('<option></option>').attr('value', entry.province_code).text(entry.province_name));
+        // Update the province input text when dropdown changes
+        $('#province1').on('change', function() {
+            const selectedProvince = $(this).find('option:selected').text();
+            $('#province-text1').val(selectedProvince);
+            loadCityDropdown(selectedProvince, '', ''); // Reload the cities based on the new province
         });
-
-        provinceDropdown.val(selectedProvince); // Set selected province
-        provinceDropdown.trigger('change'); // Trigger the city dropdown to populate based on province
     });
 }
 
-function fillCities(cityDropdownSelector, selectedCity) {
-    let cityDropdown = $(cityDropdownSelector);
-    let provinceCode = $('#province1').val();
-    cityDropdown.empty();
-    cityDropdown.append('<option selected="true" disabled>Choose City</option>');
-    
-    const cityUrl = 'ph-json/city.json'; // Adjust the path accordingly
-    $.getJSON(cityUrl, function(data) {
-        var result = data.filter(function(value) {
-            return value.province_code == provinceCode;
+function loadCityDropdown(provinceName, selectedCity, selectedBarangay) {
+    $.getJSON('ph-json/province.json', function(provinceData) {
+        // Find the selected province's code
+        const selectedProvince = provinceData.find(province => province.province_name === provinceName);
+        if (!selectedProvince) {
+            console.warn('No matching province found for:', provinceName);
+            return;
+        }
+        const provinceCode = selectedProvince.province_code;
+
+        // Fetch city data and filter by the province code
+        $.getJSON('ph-json/city.json', function(cityData) {
+            const cityDropdown = $('#city1');
+            cityDropdown.empty();
+            cityDropdown.append('<option value="" disabled>Select City</option>');
+
+            const filteredCities = cityData.filter(city => city.province_code === provinceCode);
+            if (filteredCities.length === 0) {
+                console.warn('No cities found for province:', provinceName);
+            }
+
+            // Populate city dropdown
+            $.each(filteredCities, function(index, city) {
+                const isSelected = city.city_name === selectedCity ? 'selected' : '';
+                cityDropdown.append(`<option value="${city.city_name}" ${isSelected}>${city.city_name}</option>`);
+            });
+
+            // Set the city text input
+            $('#city-text1').val(selectedCity);
+
+            // Load barangays based on selected city
+            loadBarangayDropdown(selectedCity, selectedBarangay);
         });
 
-        $.each(result, function(key, entry) {
-            cityDropdown.append($('<option></option>').attr('value', entry.city_code).text(entry.city_name));
+        // Update city text when dropdown changes
+        $('#city1').on('change', function() {
+            const selectedCity = $(this).find('option:selected').text();
+            $('#city-text1').val(selectedCity);
+            loadBarangayDropdown(selectedCity, '');  // Reload barangays
         });
-
-        cityDropdown.val(selectedCity); // Set selected city
-        cityDropdown.trigger('change'); // Trigger the barangay dropdown to populate based on city
     });
 }
 
-function fillBarangays(barangayDropdownSelector, selectedBarangay) {
-    let barangayDropdown = $(barangayDropdownSelector);
-    let cityCode = $('#city1').val();
-    barangayDropdown.empty();
-    barangayDropdown.append('<option selected="true" disabled>Choose Barangay</option>');
-    
-    const barangayUrl = 'ph-json/barangay.json'; // Adjust the path accordingly
-    $.getJSON(barangayUrl, function(data) {
-        var result = data.filter(function(value) {
-            return value.city_code == cityCode;
+function loadBarangayDropdown(cityName, selectedBarangay) {
+    $.getJSON('ph-json/city.json', function(cityData) {
+        // Find the selected city's code
+        const selectedCity = cityData.find(city => city.city_name === cityName);
+        if (!selectedCity) {
+            console.warn('No matching city found for:', cityName);
+            return;
+        }
+        const cityCode = selectedCity.city_code;
+
+        // Fetch barangay data and filter by city code
+        $.getJSON('ph-json/barangay.json', function(barangayData) {
+            const barangayDropdown = $('#barangay1');
+            barangayDropdown.empty();
+            barangayDropdown.append('<option value="" disabled>Select Barangay</option>');
+
+            const filteredBarangays = barangayData.filter(barangay => barangay.city_code === cityCode);
+            if (filteredBarangays.length === 0) {
+                console.warn('No barangays found for city:', cityName);
+            }
+
+            // Populate barangay dropdown
+            $.each(filteredBarangays, function(index, barangay) {
+                const isSelected = barangay.brgy_name === selectedBarangay ? 'selected' : '';
+                barangayDropdown.append(`<option value="${barangay.brgy_name}" ${isSelected}>${barangay.brgy_name}</option>`);
+            });
+
+            // Set the barangay text input
+            $('#barangay-text1').val(selectedBarangay);
         });
 
-        $.each(result, function(key, entry) {
-            barangayDropdown.append($('<option></option>').attr('value', entry.brgy_code).text(entry.brgy_name));
+        // Update barangay text when dropdown changes
+        $('#barangay1').on('change', function() {
+            const selectedBarangay = $(this).find('option:selected').text();
+            $('#barangay-text1').val(selectedBarangay);
         });
-
-        barangayDropdown.val(selectedBarangay); // Set selected barangay
     });
 }
 
@@ -783,7 +916,6 @@ function fillBarangays(barangayDropdownSelector, selectedBarangay) {
 $(document).on('click', '.delete-button', function() {
     var plantId = $(this).data('plantid'); // Get the plant ID
     $('#deleteConfirmationModal').show(); // Open the delete confirmation modal
-
     // Set up the confirm button in the modal
     $('#confirmDeleteButton').off('click').on('click', function() {
         // Redirect to delete script
@@ -808,43 +940,84 @@ $(window).on('click', function(event) {
         $('#deleteConfirmationModal').hide();
     }
 });
-   // Preview Image Function
-   function previewImage(inputId) {
-        const input = document.getElementById(inputId);
-        const preview = document.getElementById(inputId + 'Preview');
-        const file = input.files[0];
 
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+// Handle the form submission for updating the product
+$('#editProductForm').on('submit', function(e) {
+    e.preventDefault(); // Prevent default form submission
+
+    // Get dropdown values
+    var selectedRegion = $('#region1').val();
+    var selectedProvince = $('#province1').val();
+    var selectedCity = $('#city1').val();
+    var selectedBarangay = $('#barangay1').val();
+
+    // Get hidden text values
+    var regionText = $('#region-text1').val();
+    var provinceText = $('#province-text1').val();
+    var cityText = $('#city-text1').val();
+    var barangayText = $('#barangay-text1').val();
+
+    // Compare dropdown values with hidden text fields
+    if (selectedRegion !== regionText || selectedProvince !== provinceText || selectedCity !== cityText || selectedBarangay !== barangayText) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Error',
+            text: 'The dropdown values and the corresponding hidden text fields do not match.',
+            confirmButtonText: 'OK'
+        });
+        return; // Stop form submission
+    }
+    var formData = new FormData(this); // Create FormData object from the form
+Swal.fire({
+    icon: 'warning',
+    title: 'Are you sure you want to update this product?',
+    showCancelButton: true,
+    confirmButtonText: 'Yes',
+    cancelButtonText: 'No',
+    reverseButtons: true
+}).then((result) => {
+    if (result.isConfirmed) {
+        $.ajax({
+        url: 'edit_product.php', // URL to the PHP script that will handle the form submission
+        type: 'POST',
+        data: formData,
+        contentType: false, // Tell jQuery not to set contentType
+        processData: false, // Tell jQuery not to process the data
+        success: function(response) {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Product updated successfully',
+                showConfirmButton: false,
+                timer: 2000
+            }).then(() => {
+                $('#editProductForm')[0].reset(); // Reset the form
+                $('#editProductModal').hide(); // Hide the modal after successful submission
+                location.reload();
+            });
+            
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX Error: " + status + " " + error);
         }
+    });
     }
-
-    // Submit Form with AJAX
-    function submitEditForm() {
-        const form = document.getElementById('editProductForm');
-        const formData = new FormData(form);
-
-        fetch('edit_product.php', {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('editMessage').innerHTML = data;
-            // Close modal or refresh data as needed
-        })
-        .catch(error => console.error('Error:', error));
-    }
+});
+  
+});
 
 $(document).on('click', '.mark-sold-button', function() {
     var plantId = $(this).data('plantid'); // Get the plant ID
-    console.log(plantId);
-
-    $.ajax({
+Swal.fire({
+    icon: 'warning',
+    title: 'Are you sure you want to mark this product as sold?',
+    showCancelButton: true,
+    confirmButtonText: 'Yes',
+    cancelButtonText: 'No',
+    reverseButtons: true
+}).then((result) => {
+    if (result.isConfirmed) {
+        $.ajax({
         url: 'mark_as_sold.php', // Create this PHP file
         type: 'POST',
         data: { plantid: plantId },
@@ -856,7 +1029,6 @@ $(document).on('click', '.mark-sold-button', function() {
                 showConfirmButton: false,
                 timer: 3000
             })
-
             setTimeout(function() {
                 window.location.reload(); // Refresh the page or handle as needed
             }, 2000);
@@ -865,7 +1037,11 @@ $(document).on('click', '.mark-sold-button', function() {
             alert('Error marking product as sold.');
         }
     });
+    }
+})
 });
+   
+
 
 
 // Logout AJAX

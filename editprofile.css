@@ -136,7 +136,7 @@ input[type="submit"] {
     display: block;
     width: 100%;
     padding: 12px;
-    background-color: #4caf50;
+    background-color: darkgreen;
     color: white;
     border: none;
     border-radius: 8px;
@@ -164,14 +164,14 @@ input[type="submit"]:hover {
     height: 200px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #4caf50;
+    border: 2px solid darkgreen;
 }
 
 #change-profile-pic {
     margin-top: 10px;
     cursor: pointer;
     font-size: 14px;
-    background-color: #4caf50;
+    background-color: darkgreen;
     color: white;
     border: none;
     border-radius: 8px;
@@ -179,7 +179,7 @@ input[type="submit"]:hover {
     transition: color 0.3s ease;
 }
 #change-profile-pic:hover {
-    background-color: #45a049;
+    background-color: darkgreen;
 }
 @media (max-width: 600px) {
     .profile-picture-upload img {
@@ -187,7 +187,7 @@ input[type="submit"]:hover {
         height: 150px;
         border-radius: 50%;
         object-fit: cover;
-        border: 2px solid #4caf50;
+        border: 2px solid darkgreen;
     }
 }
 
@@ -196,7 +196,7 @@ input[type="submit"]:hover {
     margin-top: 10px;
     cursor: pointer;
     font-size: 14px;
-    color: #4caf50;
+    color: darkgreen;
     transition: color 0.3s ease;
 }
 

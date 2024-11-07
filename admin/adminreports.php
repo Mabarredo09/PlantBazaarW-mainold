@@ -341,7 +341,6 @@ $resultReports = mysqli_query($conn, $queryReports);
     </div>
 </div>
 
-
         <div class="header">
             <h1>Admin Dashboard</h1>
         </div>

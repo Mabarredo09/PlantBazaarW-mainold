@@ -8,6 +8,9 @@ if (!isset($_SESSION['admin'])) {
     exit();
 }
 
+// Initialize the search term to avoid the undefined variable warning
+$searchTerm = isset($_GET['search']) ? $_GET['search'] : ''; // Get search term from URL (GET request)
+
 // Fetch the total number of users
 $query = "SELECT COUNT(id) AS total_users FROM users";
 $result = mysqli_query($conn, $query);
@@ -32,9 +35,8 @@ $resultReportedUsers = mysqli_query($conn, $queryReportedUsers);
 $rowReportedUsers = mysqli_fetch_assoc($resultReportedUsers);
 $totalReportedUsers = $rowReportedUsers['total_reported_users']; // Get the total number of reported users
 
-
-// Fetch users for the table
-$queryUsers = "SELECT id, firstname, lastname FROM users"; // Only fetch required fields
+// Search functionality integration
+$queryUsers = "SELECT id, firstname, lastname FROM users WHERE LOWER(firstname) LIKE LOWER('%$searchTerm%') OR LOWER(lastname) LIKE LOWER('%$searchTerm%')";
 $resultUsers = mysqli_query($conn, $queryUsers);
 
 // Fetch listed plants with listing_status = 1
@@ -185,6 +187,14 @@ th {
     text-decoration: none;
     cursor: pointer;
 }
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
      </style>
        
 </head>
@@ -206,7 +216,7 @@ th {
         <div class="header">
             <h1>Admin Dashboard</h1>
         </div>
-        
+
         <div class="summary">
             <div class="summary-box">
                 <h2>Total Users</h2>
@@ -238,6 +248,10 @@ th {
         </div>
 
         <h2>Users List</h2>
+        <form method="get" action="admindashboard.php">
+            <input type="text" name="search" placeholder="Search by name" value="<?php echo $searchTerm; ?>" />
+            <button type="submit">Search</button>
+        </form>
         <table>
             <tr>
                 <th>Name</th>
@@ -249,20 +263,6 @@ th {
                     <td>
                         <button class="view-info-btn" onclick="showModal(<?php echo $row['id']; ?>)">View Info</button>
                     </td>
-<style>
-    .view-info-btn {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .view-info-btn:hover {
-        background-color: #45a049;
-    }
-</style>
                 </tr>
             <?php } ?>
         </table>
@@ -293,8 +293,7 @@ th {
                         <p><strong>Gender:</strong> ${data.gender}</p>
                         <p><strong>Phone Number:</strong> ${data.phoneNumber}</p>
                         <p><strong>Region:</strong> ${data.region}</p>
-                        <p><strong>city:</strong> ${data.city}</p>
-
+                        <p><strong>City:</strong> ${data.city}</p>
                     `;
                     document.getElementById('userDetails').innerHTML = userDetails;
                     document.getElementById('userModal').style.display = "block"; // Show the modal

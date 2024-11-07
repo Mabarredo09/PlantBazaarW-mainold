@@ -1,3 +1,4 @@
+<footer>
 <div class="footer" id="footer">
     <div class="about-us" id="about">
         <h2>About Plant Bazaar</h2>
@@ -11,7 +12,7 @@
         <p>Phone: <a href="tel:+18001234567">+1 (800) 123-4567</a></p>
     </div>
 </div>
-
+</footer>
 
 <style>
     .footer {
