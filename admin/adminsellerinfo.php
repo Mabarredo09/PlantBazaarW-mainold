@@ -32,13 +32,18 @@ $resultReportedUsers = mysqli_query($conn, $queryReportedUsers);
 $rowReportedUsers = mysqli_fetch_assoc($resultReportedUsers);
 $totalReportedUsers = $rowReportedUsers['total_reported_users']; // Get the total number of reported users
 
+// Search functionality
+$searchQuery = "";
+if (isset($_GET['search'])) {
+    $searchTerm = mysqli_real_escape_string($conn, $_GET['search']);
+    $searchQuery = " AND (users.firstname LIKE '%$searchTerm%' OR users.lastname LIKE '%$searchTerm%')";
+}
 
-// Fetch users for the table
-$queryUsers = "SELECT id, firstname, lastname FROM users"; // Only fetch required fields
-$resultUsers = mysqli_query($conn, $queryUsers);
-
-// Fetch sellers for the table
-$querySellers = "SELECT seller_id, user_id FROM sellers"; // Modify this to get seller information
+// Fetch sellers for the table with search functionality
+$querySellers = "SELECT sellers.seller_id, sellers.user_id, users.firstname, users.lastname 
+                 FROM sellers 
+                 JOIN users ON sellers.user_id = users.id
+                 WHERE 1 $searchQuery"; // Modify this to get seller information
 $resultSellers = mysqli_query($conn, $querySellers);
 
 // Fetch listed plants with listing_status = 1
@@ -189,6 +194,14 @@ $totalSoldPlants = $rowTotalSoldPlants['total_sold_plants']; // Get the total nu
             text-decoration: none;
             cursor: pointer;
         }
+        button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
     </style>
 </head>
 <body>
@@ -209,7 +222,6 @@ $totalSoldPlants = $rowTotalSoldPlants['total_sold_plants']; // Get the total nu
         <div class="header">
             <h1>Admin Dashboard</h1>
         </div>
-        
         <div class="summary">
             <div class="summary-box">
                 <h2>Total Users</h2>
@@ -236,11 +248,19 @@ $totalSoldPlants = $rowTotalSoldPlants['total_sold_plants']; // Get the total nu
             </div>
             <div class="summary-box">
                 <h2>Total Reports</h2>
-                <p><strong><?php ; ?></strong></p>
+                <p><strong><?php echo $totalReportedUsers; ?></strong></p>
             </div>
         </div>
+        
 
         <h2>Sellers List</h2>
+        <!-- Search bar for sellers -->
+        <div class="search-container">
+            <form method="GET" action="adminsellerinfo.php">
+                <input type="text" name="search" placeholder="Search sellers by name" value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
+                <button type="submit">Search</button>
+            </form>
+        </div>
         <table>
             <tr>
                 <th>Name</th>
@@ -275,6 +295,7 @@ $totalSoldPlants = $rowTotalSoldPlants['total_sold_plants']; // Get the total nu
             <?php } ?>
         </table>
     </div>
+
     <!-- Modal for Seller Info -->
     <div id="sellerModal" class="modal">
         <div class="modal-content">

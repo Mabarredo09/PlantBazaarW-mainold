@@ -100,7 +100,7 @@ if ($path = getImagePath($sellerEmail, $img3)) $images[] = $path;
         <div class="plantContainer">
             <div class="card">
                 <div class="card-image-container">
-                    <img id="plant-image" src="<?php echo $images[0]; ?>" alt="<?php echo $plantName; ?>">
+                    <img id="plant-image" style="width:300px; height:300px; object-fit: cover;" src="<?php echo $images[0]; ?>" alt="<?php echo $plantName; ?>">
 
                     <!-- Always show the buttons, even if there’s only one image -->
                     <div class="card-image-controls">

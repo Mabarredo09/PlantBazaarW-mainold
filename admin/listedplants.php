@@ -26,82 +26,6 @@ $resultPendingApplicants = mysqli_query($conn, $queryPendingApplicants);
 $rowPendingApplicants = mysqli_fetch_assoc($resultPendingApplicants);
 $totalPendingApplicants = $rowPendingApplicants['total_pending_applicants']; // Get the total number of pending applicants
 
-// Fetch the total number of reported users
-$queryReportedUsers = "SELECT COUNT(DISTINCT reported_user) AS total_reported_users FROM reports WHERE status = 'pending'";
-$resultReportedUsers = mysqli_query($conn, $queryReportedUsers);
-$rowReportedUsers = mysqli_fetch_assoc($resultReportedUsers);
-$totalReportedUsers = $rowReportedUsers['total_reported_users']; // Get the total number of reported users
-
-// Handle approve/reject actions for reports
-if (isset($_POST['action_report'])) {
-    $reportId = $_POST['reportID'];
-
-    if ($_POST['action_report'] === 'approve') {
-        // Approve: Archive the user before deleting
-        $archiveUserQuery = "INSERT INTO reported_user_archive (user_id, firstname, lastname, email)
-                              SELECT u.id, u.firstname, u.lastname, u.email 
-                              FROM users u
-                              JOIN reports r ON u.id = r.user_id
-                              WHERE r.report_id = ?";
-        $stmt = mysqli_prepare($conn, $archiveUserQuery);
-        mysqli_stmt_bind_param($stmt, 'i', $reportId);
-        mysqli_stmt_execute($stmt);
-
-        // Delete the user account
-        $deleteUserQuery = "DELETE FROM users WHERE id = (SELECT user_id FROM reports WHERE report_id = ?)";
-        $stmt = mysqli_prepare($conn, $deleteUserQuery);
-        mysqli_stmt_bind_param($stmt, 'i', $reportId);
-        mysqli_stmt_execute($stmt);
-
-        // Send email notification to the user about account deletion
-        // First, get the user's email for the notification
-        $emailQuery = "SELECT u.email FROM users u JOIN reports r ON u.id = r.user_id WHERE r.report_id = ?";
-        $stmt = mysqli_prepare($conn, $emailQuery);
-        mysqli_stmt_bind_param($stmt, 'i', $reportId);
-        mysqli_stmt_execute($stmt);
-        $resultEmail = mysqli_stmt_get_result($stmt);
-        $user = mysqli_fetch_assoc($resultEmail);
-        $userEmail = $user['email'];
-
-        // Prepare the email content
-        $subject = "Account Deletion Notification";
-        $message = "Dear user, your account has been deleted due to violation of our terms of service. If you have any questions, please contact support.";
-        $headers = "From: support@plantbazaar.com"; // Change to your support email
-
-        // Send email
-        mail($userEmail, $subject, $message, $headers);
-
-        // Update report status to approved
-        $updateReport = "UPDATE reports SET status = 'approved' WHERE report_id = ?";
-        $stmt = mysqli_prepare($conn, $updateReport);
-        mysqli_stmt_bind_param($stmt, 'i', $reportId);
-        mysqli_stmt_execute($stmt);
-
-        echo "<script>
-                Swal.fire('Success!', 'Report Approved and User Deleted!', 'success')
-                    .then(() => location.reload());
-              </script>";
-    } elseif ($_POST['action_report'] === 'reject') {
-        // Reject the report: Just delete the report entry from the reports table
-        $deleteReport = "DELETE FROM reports WHERE reported_user_id = ?";
-        $stmt = mysqli_prepare($conn, $deleteReport);
-        mysqli_stmt_bind_param($stmt, 'i', $reportId);
-        mysqli_stmt_execute($stmt);
-
-        echo "<script>
-                Swal.fire('Rejected', 'Report has been removed.', 'info')
-                    .then(() => location.reload());
-              </script>";
-    }
-}
-
-// Fetch reports
-$queryReports = "SELECT r.reported_user, r.id, u.firstname, u.lastname, u.email, r.report_reason, r.proof_img_1, r.proof_img_2, r.proof_img_3, r.proof_img_4, r.proof_img_5, r.proof_img_6
-                 FROM reports r
-                 JOIN users u ON r.id = u.id
-                 WHERE r.status = 'pending'";
-$resultReports = mysqli_query($conn, $queryReports);
-
 // Fetch the total number of users, sellers, applicants, and reports (already fetched in previous steps)
 
 
@@ -124,6 +48,23 @@ $totalSoldPlantsQuery = "SELECT COUNT(*) AS total_sold_plants FROM product WHERE
 $resultTotalSoldPlants = mysqli_query($conn, $totalSoldPlantsQuery);
 $rowTotalSoldPlants = mysqli_fetch_assoc($resultTotalSoldPlants);
 $totalSoldPlants = $rowTotalSoldPlants['total_sold_plants']; // Get the total number of sold plants
+
+// Check if the search term is set
+$searchTerm = '';
+if (isset($_GET['search'])) {
+    $searchTerm = mysqli_real_escape_string($conn, $_GET['search']);
+}
+
+// Fetch listed plants based on search term
+$query = "
+    SELECT p.*, u.email AS seller_email
+    FROM product p
+    INNER JOIN sellers s ON p.added_by = s.seller_id
+    INNER JOIN users u ON s.user_id = u.id
+    WHERE p.listing_status = 1 
+    AND (LOWER(p.plantname) LIKE LOWER('%$searchTerm%') OR LOWER(p.details) LIKE LOWER('%$searchTerm%'))
+";
+$result = mysqli_query($conn, $query);
 ?>
 
 <!DOCTYPE html>
@@ -256,6 +197,16 @@ $totalSoldPlants = $rowTotalSoldPlants['total_sold_plants']; // Get the total nu
             text-decoration: none;
             cursor: pointer;
         }
+        /* Add this to your existing CSS */
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
     </style>
 </head>
 <body>
@@ -308,76 +259,83 @@ $totalSoldPlants = $rowTotalSoldPlants['total_sold_plants']; // Get the total nu
             </div>
         </div>
 
+        
         <h2>Listed Plants</h2>
-<?php 
-$query = "
-    SELECT p.*, u.email AS seller_email
-    FROM product p
-    INNER JOIN sellers s ON p.added_by = s.seller_id
-    INNER JOIN users u ON s.user_id = u.id
-    WHERE p.listing_status = 1
+<form method="get" action="listedplants.php">
+    <input type="text" name="search" placeholder="Search by name" value="<?php echo $searchTerm; ?>" />
+    <button type="submit">Search</button>
+</form>
 
-    
-";
-$result = mysqli_query($conn, $query);
-if (mysqli_num_rows($result) > 0) {
-    echo '<table>';
-    echo '<tr>';
-    echo '<th>Plant Name</th>';
-    echo '<th>Category</th>';
-    echo '<th>Size</th>';
-    echo '<th>Price</th>';
-    echo '<th>Region</th>';
-    echo '<th>Province</th>';
-    echo '<th>City</th>';
-    echo '<th>Barangay</th>';
-    echo '<th>Street</th>';
-    echo '<th>Action</th>';
-    echo '</tr>';
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo '<tr>';
-        echo '<td>' . htmlspecialchars($row['plantname']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['plantcategories']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['plantSize']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['price']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['region']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['province']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['city']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['barangay']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['street']) . '</td>';
-        echo '<td><button style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;" onclick="viewMoreInfo(\'' . htmlspecialchars(json_encode($row)) . '\')">View More</button></td>';
-        echo '</tr>';
+<table>
+    <tr>
+        <th>Plant Name</th>
+        <th>Action</th>
+    </tr>
+    <?php
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo '<tr>';
+            echo '<td>' . htmlspecialchars($row['plantname']) . '</td>';
+            echo '<td><button style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;" onclick="viewMoreInfo(\'' . htmlspecialchars(json_encode($row)) . '\')">View More</button></td>';
+            echo '</tr>';
+        }
+    } else {
+        echo '<tr><td colspan="2">No listed plants found.</td></tr>';
     }
-    echo '</table>';
-} else {    
-    echo '<p>No listed plants found.</p>';
-}
-?>
-</div>
+    ?>
+</table>
 
 <script>
-   function viewMoreInfo(plantData) {
+function viewMoreInfo(plantData) {
     const plant = JSON.parse(plantData);
     const address = `${plant.region}, ${plant.province}, ${plant.city}, ${plant.barangay}, ${plant.street}`;
-    
-    // Initialize details as an empty string
+
+    // Start with the basic details HTML
     let details = `
-        <h2>${plant.plantname}</h2>
+       
         <p><strong>Size:</strong> ${plant.plantSize}</p>
         <p><strong>Category:</strong> ${plant.plantcategories}</p>
         <p><strong>Details:</strong> ${plant.details}</p>
-        <p><strong>Price:</strong> $${plant.price}</p>
+        <p><strong>Price:</strong> ₱${plant.price}</p>
         <p><strong>Address:</strong> ${address}</p>
+        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
     `;
 
-    // Loop through the images
-    for (let i = 0; i <= 2; i++) { // Assuming you want to display img1, img2, img3 (indices 0, 1, 2)
-        if (plant[`img${i + 1}`]) { // Check if the image exists
-            details += `
-                <img src="../Products/${plant.seller_email}/${plant[`img${i + 1}`]}" alt="${plant.plantname}" style="width:100px; margin-right: 10px;">
-            `;
-        }
-    }
+    // Array to store image paths
+    // Check each image and add only if it exists and is not empty
+// Array to store image paths
+const images = [];
+
+// Check each image and add only if it exists, is not empty, and is not the default image
+if (plant.img1 && plant.img1.trim() !== '' && plant.img1 !== 'default.jpg') {
+    images.push(`../Products/${plant.seller_email}/${plant.img1}`);
+}
+if (plant.img2 && plant.img2.trim() !== '' && plant.img2 !== 'default.jpg') {
+    images.push(`../Products/${plant.seller_email}/${plant.img2}`);
+}
+if (plant.img3 && plant.img3.trim() !== '' && plant.img3 !== 'default.jpg') {
+    images.push(`../Products/${plant.seller_email}/${plant.img3}`);
+}
+
+// Add images to the details HTML only if there are images
+if (images.length > 0) {
+    images.forEach(imgPath => {
+        details += `
+            <img 
+                src="${imgPath}" 
+                alt="${plant.plantname}" 
+                style="width: 200px; height: 200px; object-fit: cover; border-radius: 8px; cursor: pointer;"
+                onclick="showFullImage('${imgPath}')"
+            >
+        `;
+    });
+} else {
+    details += '<p>No images available.</p>';
+}
+
+
+
+    details += '</div>';
 
     // Show the SweetAlert modal
     Swal.fire({
@@ -386,9 +344,38 @@ if (mysqli_num_rows($result) > 0) {
         showCloseButton: true,
         showCancelButton: false,
         focusConfirm: false,
+        width: '800px'
     });
 }
 
+// Function to show full-size image with fixed dimensions
+function showFullImage(imgPath) {
+    Swal.fire({
+        imageUrl: imgPath,
+        imageAlt: 'Full-size image',
+        width: 'auto',
+        showCloseButton: true,
+        showConfirmButton: false,
+        imageWidth: 400,  // Fixed width for zoomed image
+        imageHeight: 400, // Fixed height for zoomed image
+        background: '#fff',
+        padding: '1rem',
+        customClass: {
+            image: 'swal2-image-custom'
+        }
+    });
+}
+
+// Add this CSS to your existing styles
+const style = document.createElement('style');
+style.textContent = `
+    .swal2-image-custom {
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+`;
+document.head.appendChild(style);
 </script>
 
 </html>

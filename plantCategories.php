@@ -156,8 +156,11 @@ if ($isLoggedIn) {
     </div>
     <div class="search-bar-container">
     <input type="text" id="searchBar" placeholder="Search...">
+    <span id="searchIcon" class="icon-search">&#128269;</span> <!-- Unicode for search icon -->
     <button id="clearSearch" class="clear-search-btn" style="display: none;">&times;</button>
 </div>
+
+
 
     <div class="newly-contents" id="newly-contents">
         <!-- Products will be loaded dynamically -->
@@ -239,7 +242,7 @@ $(document).ready(function () {
 
         return `<div class="plant-item" data-location="${product.city}" data-category="${product.plantcategories}" data-size="${product.plantSize}" data-price="${product.price}">
             <div class="plant-image">
-                <img src="Products/${product.seller_email}/${product.img1}" alt="${product.plantname}" onerror="this.onerror=null; this.src='placeholder.jpg';">
+                <img style="width: 100%; height: 100%; object-fit: cover;" src="Products/${product.seller_email}/${product.img1}" alt="${product.plantname}" onerror="this.onerror=null; this.src='placeholder.jpg';">
             </div>
             <p>${product.plantname}</p>
             <p>Price: ₱${product.price}</p>
@@ -253,6 +256,8 @@ $(document).ready(function () {
     }).join('');
     $('#newly-contents').html(contentHtml);
 }
+
+
 
     function renderPagination(totalPages, current) {
         let paginationHtml = '';
@@ -297,6 +302,130 @@ $(document).ready(function () {
 
             return matchesType && matchesLocation && matchesSize && matchesSearchTerm; // Ensure all criteria match
         });
+        
+                $(document).ready(function () {
+            $('#searchBar').on('input', function () {
+                let searchTerm = $(this).val().trim();
+                
+                if (searchTerm) {
+                    $('#clearSearch').show().addClass('active'); // Show "X" icon
+                    filterPlants(); // Call filter function to display filtered plants
+                } else {
+                    $('#clearSearch').hide().removeClass('active'); // Show search icon
+                    displayPlants(allPlants); // Reset to default view when input is cleared
+                }
+            });
+
+            $('#clearSearch').on('click', function () {
+                $('#searchBar').val(''); // Clear the search input
+                $(this).hide().removeClass('active'); // Switch back to search icon
+                displayPlants(allPlants); // Reset to default view
+            });
+        });
+
+        $(document).ready(function () {
+    // Check search bar state on page load and show the appropriate icon
+    toggleSearchIcon();
+
+    // Toggle between search and "X" icon based on input
+    $('#searchBar').on('input', function () {
+        toggleSearchIcon();
+        let searchTerm = $(this).val().trim().toLowerCase();
+
+        if (searchTerm) {
+            filterPlants(); // Call the filtering function
+        } else {
+            displayPlants(allPlants); // Reset to default plant list
+        }
+    });
+
+    // Clear search bar and reset plant list when "X" button is clicked
+    $('#clearSearch').on('click', function () {
+        $('#searchBar').val(''); // Clear search input
+        toggleSearchIcon(); // Update icons
+        displayPlants(allPlants); // Reset to default plant list
+    });
+
+    // Function to toggle the icons based on search bar input
+    function toggleSearchIcon() {
+        if ($('#searchBar').val().trim()) {
+            $('#searchIcon').hide(); // Hide search icon
+            $('#clearIcon').show();  // Show "X" icon
+        } else {
+            $('#searchIcon').show(); // Show search icon when input is empty
+            $('#clearIcon').hide();  // Hide "X" icon
+        }
+    }
+});
+
+function filterPlants() {
+    let searchTerm = $('#searchBar').val().toLowerCase();
+    let selectedLocations = $('.location-checkbox:checked').map(function () {
+        return $(this).val();
+    }).get();
+    let selectedSizes = $('.size-checkbox:checked').map(function () {
+        return $(this).val();
+    }).get();
+    let selectedTypes = $('.category-checkbox:checked').map(function () {
+        return $(this).val();
+    }).get();
+
+    // Filter plants based on selected checkboxes and search term
+    let filteredPlants = allPlants.filter(function (plant) {
+        let plantLocation = plant.city;
+        let plantSize = plant.plantSize;
+        let plantType = plant.plantcategories;
+        let plantName = plant.plantname.toLowerCase();
+
+        let matchesType = selectedTypes.length === 0 || selectedTypes.includes(plantType);
+        let matchesLocation = selectedLocations.length === 0 || selectedLocations.includes(plantLocation);
+        let matchesSize = selectedSizes.length === 0 || selectedSizes.includes(plantSize);
+        let matchesSearchTerm = plantName.includes(searchTerm);
+
+        return matchesType && matchesLocation && matchesSize && matchesSearchTerm;
+    });
+
+    // Display the filtered plants
+    displayPlants(filteredPlants);
+}
+
+$(document).ready(function () {
+    // Function to toggle icons based on search input content
+    function toggleSearchIcon() {
+        if ($('#searchBar').val().trim() !== "") {
+            $('#searchIcon').hide(); // Hide the search icon
+            $('#clearSearch').show(); // Show the "X" clear button
+        } else {
+            $('#searchIcon').show(); // Show the search icon
+            $('#clearSearch').hide(); // Hide the "X" clear button
+        }
+    }
+
+    // Toggle icons based on typing in the search bar
+    $('#searchBar').on('input', function () {
+        toggleSearchIcon();
+
+        // Perform filtering when there is a search term
+        let searchTerm = $(this).val().trim();
+        if (searchTerm) {
+            filterPlants();
+        } else {
+            displayPlants(allPlants); // Reset to default view
+        }
+    });
+
+    // Clear the search bar when "X" is clicked and reset plant list
+    $('#clearSearch').on('click', function () {
+        $('#searchBar').val('');  // Clear the search input
+        toggleSearchIcon();       // Update icon visibility
+        displayPlants(allPlants); // Reset plant list to default
+    });
+
+    // Initial toggle to ensure icons are correctly displayed on load
+    toggleSearchIcon();
+});
+
+
 
         // Reset current page and load filtered plants
         currentPage = 1;

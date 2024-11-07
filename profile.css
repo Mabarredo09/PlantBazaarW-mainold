@@ -22,23 +22,23 @@ body {
     position: absolute; /* Fixed position within the layout */
     top: 30px; /* Adjusted position under the logo, if needed */
     left: 220px; /* Adjust as necessary for layout */
-    background-color: #4CAF50; /* Match the green background */
+    background-color: darkgreen; /* Match the green background */
     color: white; /* White text for better visibility */
-    padding: 8px 16px; /* Reduced padding for a smaller button */
-    font-size: 14px; /* Reduced font size to make it smaller */
+    padding: 8px 12px; /* Reduced padding for a smaller button */
+    font-size: 12px; /* Reduced font size to make it smaller */
     border: none; /* No border */
-    border-radius: 20px; /* Rounded corners */
+    border-radius: 10px; /* Rounded corners */
     text-decoration: none; /* Remove underline */
     cursor: pointer; /* Change cursor to pointer */
     z-index: 1000; /* Ensure it is above other elements */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
     margin-top: 55px; /* Adjust margin to fit the design */
     transition: background-color 0.3s; /* Transition for hover effect */
-    margin-left: -180px;
+    margin-left: -210px;
 }
 
 .back-btn:hover {
-    background-color: #45a049; /* Darker green on hover */
+    background-color: #4CAF50; /* Darker green on hover */
 }
 .seller-info {
     text-align: center; /* Center-align seller info */
@@ -125,7 +125,7 @@ h3 {
 
 /* Keep the button fixed at the bottom */
 .view-details {
-    background-color: #28a745; /* Green background for button */
+    background-color: darkgreen; /* Green background for button */
     color: #ffffff; /* White text */
     border: none; /* No border */
     padding: 10px; /* Padding for button */
@@ -133,14 +133,14 @@ h3 {
     cursor: pointer; /* Pointer cursor for button */
     transition: background-color 0.3s; /* Transition for hover */
     margin-top: auto; /* Space above button, push it to the bottom */
-    width: 160px; /* Fixed width for button */
+    width: 140px; /* Fixed width for button */
     text-align: center; /* Center align text in button */
-    font-size: 13px;
+    font-size: 12px;
 }
 
 /* Hover effect for button */
 .view-details:hover {
-    background-color: #218838; /* Darker green on hover */
+    background-color: #4CAF50; /* Darker green on hover */
 }
 
 /* Zoom Modal Styles */

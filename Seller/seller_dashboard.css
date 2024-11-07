@@ -165,7 +165,7 @@ body::-webkit-scrollbar-thumb {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 1rem;
@@ -371,14 +371,14 @@ body::-webkit-scrollbar-thumb {
 
 .product-list h2 {
     font-size: 20px;
-    color: #4CAF50; /* Dark green for headers */
+    color: darkgreen; /* Dark green for headers */
     margin-bottom: 10px;
 }
 
 #openModalBtn {
     background-color: #4CAF50;
     color: white;
-    padding: 14px 20px;
+    padding: 10px 20px;
     margin: 8px 0;
     border: none;
     cursor: pointer;
@@ -393,9 +393,9 @@ body::-webkit-scrollbar-thumb {
 }
 
 #openModalBtn1 {
-    background-color: #386641;
+    background-color: #4CAF50;
     color: white;
-    padding: 14px 20px;
+    padding: 10px 10px;
     margin: 8px 0;
     border: none;
     cursor: pointer;
@@ -407,6 +407,34 @@ body::-webkit-scrollbar-thumb {
 
 #openModalBtn1:hover {
     opacity: 1;
+}
+
+.add-plant-button {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text color */
+    font-size: 16px; /* Medium font size */
+    padding: 12px 24px; /* Padding for height and width */
+    border: none; /* No border */
+    border-radius: 5px; /* Slightly rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+/* Hover effect */
+.add-plant-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* Active state */
+.add-plant-button:active {
+    background-color: #3e8e41; /* Even darker green when clicked */
+    transform: scale(0.98); /* Slightly shrink button on click */
+}
+
+/* Focus state */
+.add-plant-button:focus {
+    outline: none; /* Remove outline on focus */
+    box-shadow: 0 0 5px rgba(0, 150, 0, 0.5); /* Add shadow when focused */
 }
 
 
@@ -444,7 +472,7 @@ body::-webkit-scrollbar-thumb {
     text-decoration: none;
     cursor: pointer;
 }#confirmDeleteButton {
-    background-color: #f44336;
+    background-color: red;
    
 }
 
@@ -531,13 +559,38 @@ textarea {
 }
 
 .pagination button:hover {
-    background-color: darkgreen;
+    background-color: #4CAF50;
 }
 
 .pagination .active {
-    background-color: darkgreen;
+    background-color: #4CAF50;
 }
 
+select.region {
+    font-size: 16px;         /* Increase font size for better readability */
+    padding: 10px;           /* Add padding for a thicker look */
+    border: 2px solid #000;  /* Set a thicker border */
+    border-radius: 5px;      /* Optional: add rounded corners */
+    background-color: #f9f9f9; /* Optional: set a light background color */
+    outline: none;           /* Remove the default outline */
+    width: 100%;             /* Set width to fill the container */
+}
 
+/* Style for focused select */
+select.region:focus {
+    border-color: #007bff; /* Highlight border on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a subtle shadow */
+}
 
-
+#editplantsize {
+        width: 100%;
+        padding: 12px 20px;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+        font-size: 16px;
+        resize: none;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }

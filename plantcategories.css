@@ -148,7 +148,7 @@ h1 {
 
 /* Adjust image size and aspect ratio */
 .plant-image {
-    width: 100%;
+    width: 200px;
     height: 200px; /* Fixed height for consistent size */
     display: flex;
     justify-content: center;
@@ -163,7 +163,7 @@ h1 {
 .plant-image img {
     max-width: 100%; /* Ensure the image width fits within the container */
     max-height: 100%; /* Ensure the image height fits within the container */
-    object-fit: contain; /* Display image fully with borders if needed */
+    object-fit: cover; /* Display image fully with borders if needed */
     background-color: #fff;
 }
 
@@ -184,26 +184,28 @@ h1 {
 
 button.view-details,
 button.chat-seller {
-    padding: 12px 20px;
+    padding: 12px 12px;
     border: none;
-    border-radius: 30px; /* Rounder buttons */
+    border-radius: 10px; /* Rounder buttons */
     cursor: pointer;
     color: #fff;
     font-weight: bold;
     font-size: 0.9rem;
     transition: background-color 0.3s ease;
+    font-size: 10px
+    ;
 }
 
 button.view-details {
-    background-color: #386641;
+    background-color: darkgreen;
 }
 
 button.view-details:hover {
-    background-color: #274528;
+    background-color: #4CAF50;
 }
 
 button.chat-seller {
-    background-color: #0A0908;
+    background-color: black;
 }
 
 button.chat-seller:hover {
@@ -382,3 +384,65 @@ button.chat-seller:hover {
     background-color: darkgreen; /* Active page background */
     border: 1px solid darkgreen; /* Active page border */
 }
+.search-bar-container {
+    position: relative;  /* Ensure positioning context for absolute elements */
+    width: 100%;  /* Ensure full width for the container */
+}
+
+#searchBar {
+    padding-right: 50px;  /* Increase padding to avoid clipping the icon */
+}
+
+.icon-search {
+    font-size: 20px;  /* Set the desired size of the icon */
+    color: inherit;  /* Inherit the color from the parent container or text */
+    cursor: pointer;  /* Makes the icon clickable */
+    position: absolute;  /* Allow precise positioning */
+    top: 35%;  /* Vertically center the icon */
+    left: 10px;  /* Adjust this value for horizontal alignment */
+    transform: translateY(-50%);  /* Perfectly center the icon vertically */
+    margin-left: 830px;
+}
+
+.search-bar-container .icon-search {
+    font-size: 20px !important;  /* Use !important to override other styles */
+}
+
+
+.clear-search-btn {
+    position: absolute;
+    right: 10px; /* Align the button to the right */
+    top: 50%; /* Vertically center the button */
+    transform: translateY(-50%); /* Perfectly center the button */
+    font-size: 15px; /* Set a larger font size for better visibility */
+    color: darkgreen; /* Text color */
+    background-color: transparent; /* Make the background transparent */
+    border: none; /* Remove any default borders */
+    cursor: pointer; /* Pointer cursor on hover */
+    padding: 5px 10px; /* Add some padding around the button */
+    border-radius: 50%; /* Round the button to make it circular */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Smooth transition for hover effects */
+    margin-top: -10px;
+}
+
+
+.clear-search-btn:focus {
+    outline: none; /* Remove outline on focus */
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4); /* Add a glowing effect on focus */
+}
+
+
+.icon-search {
+    display: inline;
+}
+
+.clear-search-btn {
+    display: none;
+}
+
+
+#searchIcon, #clearIcon {
+    font-size: 16px;
+}
+

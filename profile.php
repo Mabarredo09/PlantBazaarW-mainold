@@ -78,7 +78,7 @@ if (isset($_GET['sellerId'])) {
             echo '<p><strong>Price:</strong> ₱' . htmlspecialchars($listing['price']) . '</p>';
             echo '<p><strong>Description:</strong> ' . htmlspecialchars($listing['details']) . '</p>';
             // Modify the View More Details button to redirect to viewmoredetails.php
-            echo '<button class="view-details" onclick="viewMoreDetails(' . htmlspecialchars($listing['plantid']) . ', \'' . htmlspecialchars($sellerEmail) . '\')">View more details</button>';
+            echo '<button class="view-details" onclick="viewMoreDetails(' . htmlspecialchars($listing['plantid']) . ', \'' . htmlspecialchars($sellerEmail) . '\')">View Plants</button>';
             echo '</div>';
             echo '</div>';
         }

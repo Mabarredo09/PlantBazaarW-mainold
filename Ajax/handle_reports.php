@@ -11,8 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         if ($action === 'approve') {
-            // Fetch the reported user's email
-            $emailQuery = "SELECT u.email FROM users u INNER JOIN reports r ON u.id = r.reported_user WHERE r.id = ?";
+            // Fetch the reported user's email and reported user ID
+            $emailQuery = "SELECT u.email, r.reported_user FROM users u INNER JOIN reports r ON u.id = r.reported_user WHERE r.id = ?";
             $emailStmt = $conn->prepare($emailQuery);
             if ($emailStmt === false) {
                 throw new Exception('Prepare failed for fetching user email: ' . $conn->error);
@@ -24,34 +24,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $emailResult = $emailStmt->get_result();
             $userEmail = null;
+            $reportedUserId = null;
 
             if ($emailResult->num_rows > 0) {
                 $row = $emailResult->fetch_assoc();
                 $userEmail = $row['email']; // Get the reported user's email
+                $reportedUserId = $row['reported_user']; // Get the reported user's ID
             } else {
                 throw new Exception('No user found for the provided report ID.');
             }
 
             // Change the user status to 2 to indicate that the user has been banned
-            $changeStatusQuery = "UPDATE users SET user_status = 2 WHERE id = (SELECT reported_user FROM reports WHERE id = ?)";
+            $changeStatusQuery = "UPDATE users SET user_status = 2 WHERE id = ?";
             $stmt2 = $conn->prepare($changeStatusQuery);
             if ($stmt2 === false) {
                 throw new Exception('Prepare failed for change status: ' . $conn->error);
             }
-            $stmt2->bind_param("i", $id);
-    
+            $stmt2->bind_param("i", $reportedUserId);
+
             if (!$stmt2->execute()) {
                 throw new Exception('Error changing user status: ' . $stmt2->error);
             }
 
-            // Now delete the report
+            // Update product listing status to 3 for all products linked to the reported user via the seller table
+            $changeProductQuery = "
+                UPDATE product 
+                SET listing_status = 3 
+                WHERE added_by IN (
+                    SELECT s.seller_id 
+                    FROM sellers s 
+                    WHERE s.user_id = ?
+                )";
+            $productStmt = $conn->prepare($changeProductQuery);
+            if ($productStmt === false) {
+                throw new Exception('Prepare failed for updating product listing_status: ' . $conn->error);
+            }
+            $productStmt->bind_param("i", $reportedUserId); // Use reportedUserId here
+
+            if (!$productStmt->execute()) {
+                throw new Exception('Error updating product listing_status: ' . $productStmt->error);
+            }
+
+            // Delete the report
             $deleteReportQuery = "DELETE FROM reports WHERE id = ?";
             $stmt = $conn->prepare($deleteReportQuery);
             if ($stmt === false) {
                 throw new Exception('Prepare failed for delete report: ' . $conn->error);
             }
             $stmt->bind_param("i", $id);
-            
+
             if (!$stmt->execute()) {
                 throw new Exception('Error deleting report: ' . $stmt->error);
             }
@@ -63,7 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             echo json_encode(['success' => true, 'message' => 'User has been banned and notified.']);
-
         } elseif ($action === 'reject') {
             // Delete the report from the reports table
             $deleteReportQuery = "DELETE FROM reports WHERE id = ?";
@@ -72,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception('Prepare failed for delete report: ' . $conn->error);
             }
             $stmt->bind_param("i", $id);
-            
+
             if (!$stmt->execute()) {
                 throw new Exception('Error deleting report: ' . $stmt->error);
             }
@@ -92,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($stmt)) $stmt->close();
         if (isset($stmt2)) $stmt2->close();
         if (isset($emailStmt)) $emailStmt->close();
-        if (isset($reportStmt)) $reportStmt->close();
+        if (isset($productStmt)) $productStmt->close();
 
         // Close the database connection
         mysqli_close($conn);

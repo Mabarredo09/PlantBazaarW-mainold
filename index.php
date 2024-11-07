@@ -128,7 +128,9 @@ $(document).ready(function() {
                         let chatSellerButton = '';
                         if (currentUserEmail && currentUserEmail !== product.seller_email) {
                             chatSellerButton = `<button class="chat-seller" data-email="${product.seller_email}">Chat Seller</button>`;
+                            
                         }
+                      
 
                         contentHtml += `
                             <div class="plant-item" data-location="${product.city}">
@@ -142,7 +144,39 @@ $(document).ready(function() {
                                 <div class="plant-item-buttons">
                                     <button class="view-details" data-id="${product.plantid}" data-email="${product.seller_email}">View Details</button>
                                     ${chatSellerButton}
-                                </div>
+                                    <style>
+                                    /* Styles for View Details Button */
+                                    .view-details {
+                                        background-color: darkgreen; /* Soft green background */
+                                        color: white; /* White text */
+                                        font-size: 12px; /* Font size */
+                                        padding: 10px 10px; /* Padding for height and width */
+                                        border: none; /* Remove default border */
+                                        border-radius: 10px; /* Rounded corners */
+                                        cursor: pointer; /* Pointer cursor on hover */
+                                        transition: background-color 0.3s ease, transform 0.1s ease; /* Smooth transition for color and scale */
+                                        margin-left: 15px;
+                                        
+                                    }
+
+                                    /* Hover effect */
+                                    .view-details:hover {
+                                        background-color: #4CAF50; /* Slightly darker green on hover */
+                                    }
+
+                                    /* Active state */
+                                    .view-details:active {
+                                        background-color: #3A7; /* Even darker green when clicked */
+                                        transform: scale(0.98); /* Slightly shrink button on click */
+                                    }
+
+                                    /* Focus state */
+                                    .view-details:focus {
+                                        outline: none; /* Remove outline on focus */
+                                        box-shadow: 0 0 5px rgba(90, 160, 144, 0.5); /* Light green shadow when focused */
+                                    }
+                                    </style>
+                                                    </div>
                             </div>`;
                     });
 

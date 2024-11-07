@@ -224,8 +224,15 @@ $totalSoldPlants = $rowTotalSoldPlants['total_sold_plants']; // Get the total nu
             margin: 5% auto;
             padding: 20px;
             border: 1px solid;
-            width: 80%;
+            width: 500px;
+            height: 400px;
             border-radius: 10px; /* Rounded corners for modal */
+        }
+        #modalImage {
+            width: 500px;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px; /* Rounded corners for modal image */
         }
         .close {
             color: #aaa;
@@ -290,7 +297,6 @@ $totalSoldPlants = $rowTotalSoldPlants['total_sold_plants']; // Get the total nu
             </div>
         </div>
         </div>
-        <h2>Seller Applicant</h2>
     <table>
         <tr>
             <th>Name</th>
@@ -302,13 +308,14 @@ $totalSoldPlants = $rowTotalSoldPlants['total_sold_plants']; // Get the total nu
     <tr>
         <td><?php echo htmlspecialchars($row['firstname'] . ' ' . $row['lastname']); ?></td>
         <td>
-            <a href="#" onclick="showModal('<?php echo 'sellerapplicant/' . $row['email'] . '/' . htmlspecialchars($row['validid']); ?>')">
-                <img src="<?php echo 'sellerapplicant/' . $row['email'] . '/' . htmlspecialchars($row['validid']); ?>" alt="Valid ID" width="100" height="100">
+            <a href="#" onclick="showModal('<?php echo '../sellerapplicants/' . $row['email'] . '/' . htmlspecialchars($row['validid']); ?>')">
+                
+                <img src="<?php echo '../sellerApplicants/' . $row['email'] . '/' . htmlspecialchars($row['validid']); ?>" alt="Valid ID" width="100" height="100">
             </a>
         </td>
         <td>
-            <a href="#" onclick="showModal('<?php echo 'sellerapplicant/' . $row['email'] . '/' . htmlspecialchars($row['selfieValidid']); ?>')">
-                <img src="<?php echo 'sellerapplicant/' . $row['email'] . '/' . htmlspecialchars($row['selfieValidid']); ?>" alt="Selfie with ID" width="100" height="100">
+            <a href="#" onclick="showModal('<?php echo '../sellerapplicants/' . $row['email'] . '/' . htmlspecialchars($row['selfieValidid']); ?>')">
+                <img src="<?php echo '../sellerApplicants/' . $row['email'] . '/' . htmlspecialchars($row['selfieValidid']); ?>" alt="Selfie with ID" width="100" height="100">
             </a>
         </td>
         <td>
@@ -318,6 +325,7 @@ $totalSoldPlants = $rowTotalSoldPlants['total_sold_plants']; // Get the total nu
                 <button type="submit" name="action" value="reject" class="reject-btn">Reject</button>
             </form>
         </td>
+        
     </tr>
 <?php } ?>
     </table>
@@ -372,4 +380,5 @@ $totalSoldPlants = $rowTotalSoldPlants['total_sold_plants']; // Get the total nu
         function closeModal() {
             document.getElementById("imageModal").style.display = "none";
         }
+        
     </script>
